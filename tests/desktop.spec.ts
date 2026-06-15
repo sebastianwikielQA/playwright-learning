@@ -3,45 +3,58 @@ import { describe } from "node:test";
 
 test.describe("Desktop tests", async () => {
   test("first test", async ({ page }) => {
-    //logowanie
+    //Arrange
+    const userLogin = "tester12";
+    const userPassword = "haslo333";
+    const receiverID = "1";
+    const transferAmout = "120";
+    const tranferTitle = "pizza";
+    const successfulTransferMessage =
+      `Przelew wykonany! Jan Demobankowy - ${transferAmout},00PLN - ${tranferTitle}`;
+
+    //Act
     await page.goto("/");
-    await page.getByTestId("login-input").fill("tester12");
-    await page.getByTestId("password-input").fill("haslo333");
+    await page.getByTestId("login-input").fill(userLogin);
+    await page.getByTestId("password-input").fill(userPassword);
     await page.getByTestId("login-button").click();
 
     await page.waitForLoadState("domcontentloaded");
 
-    //test właściwy
-    await page.locator("#widget_1_transfer_receiver").selectOption("1");
-    await page.locator("#widget_1_transfer_amount").fill("120");
-    await page.locator("#widget_1_transfer_title").fill("pizza");
+    await page.locator("#widget_1_transfer_receiver").selectOption(receiverID);
+    await page.locator("#widget_1_transfer_amount").fill(transferAmout);
+    await page.locator("#widget_1_transfer_title").fill(tranferTitle);
     await page.getByRole("button", { name: "wykonaj" }).click();
     await page.getByTestId("close-button").click();
+    //Assert
 
     await expect(page.getByTestId("message-text")).toHaveText(
-      "Przelew wykonany! Jan Demobankowy - 120,00PLN - pizza",
+      successfulTransferMessage,
     );
   });
-
-  test.only("Success mobile top-up", async ({ page }) => {
-    //logowanie
+  
+  test("Success mobile top-up", async ({ page }) => {
+    //Arange
+    const userPassword = "haslo333";
+    const userLogin = "tester12";
+    const topUpAmount = "20";
+    const topUpPhoneNumber = "502 xxx xxx";
+    //Act
     await page.goto("/");
-    await page.getByTestId("login-input").fill("tester12");
-    await page.getByTestId("password-input").fill("haslo333");
+    await page.getByTestId("login-input").fill(userLogin);
+    await page.getByTestId("password-input").fill(userPassword);
     await page.getByTestId("login-button").click();
 
     await page.waitForLoadState("domcontentloaded");
 
-    //test właściwy
-    await page.locator("#widget_1_topup_receiver").selectOption("502 xxx xxx");
-    await page.locator("#widget_1_topup_amount").fill("20");
+    await page.locator("#widget_1_topup_receiver").selectOption(topUpPhoneNumber);
+    await page.locator("#widget_1_topup_amount").fill(topUpAmount);
     await page.locator("#widget_1_topup_agreement").check();
     await page.locator("#execute_phone_btn").click();
     await page.getByTestId("close-button").click();
 
-  await expect(page.getByRole('link', { name: 'Doładowanie wykonane! 20,' })).toHaveText(
-      " Doładowanie wykonane! 20,00PLN na numer 502 xxx xxx",
-    );
-
+    //Assert
+    await expect(
+      page.getByRole("link", { name: "Doładowanie wykonane! 20," }),
+    ).toHaveText(` Doładowanie wykonane! ${topUpAmount},00PLN na numer ${topUpPhoneNumber}`);
   });
 });
