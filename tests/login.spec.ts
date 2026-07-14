@@ -18,7 +18,7 @@ test.describe("Login test to demobank", () => {
     await expect(userNameLocator).toBeVisible();
     await expect(userNameLocator).toHaveText(expectedUserName);
   });
-  
+
   test("unsucessful login with incorrect credentials using too short password and too short login", async ({
     page,
   }) => {

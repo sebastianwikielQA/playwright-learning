@@ -7,10 +7,9 @@ test.describe("Desktop tests", async () => {
     const userLogin = "tester12";
     const userPassword = "haslo333";
     const receiverID = "1";
-    const transferAmout = "120";
+    const transferAmount = "120";
     const tranferTitle = "pizza";
-    const successfulTransferMessage =
-      `Przelew wykonany! Jan Demobankowy - ${transferAmout},00PLN - ${tranferTitle}`;
+    const successfulTransferMessage = `Przelew wykonany! Jan Demobankowy - ${transferAmount},00PLN - ${tranferTitle}`;
 
     //Act
     await page.goto("/");
@@ -21,7 +20,7 @@ test.describe("Desktop tests", async () => {
     await page.waitForLoadState("domcontentloaded");
 
     await page.locator("#widget_1_transfer_receiver").selectOption(receiverID);
-    await page.locator("#widget_1_transfer_amount").fill(transferAmout);
+    await page.locator("#widget_1_transfer_amount").fill(transferAmount);
     await page.locator("#widget_1_transfer_title").fill(tranferTitle);
     await page.getByRole("button", { name: "wykonaj" }).click();
     await page.getByTestId("close-button").click();
@@ -31,7 +30,7 @@ test.describe("Desktop tests", async () => {
       successfulTransferMessage,
     );
   });
-  
+
   test("Success mobile top-up", async ({ page }) => {
     //Arange
     const userPassword = "haslo333";
@@ -46,7 +45,9 @@ test.describe("Desktop tests", async () => {
 
     await page.waitForLoadState("domcontentloaded");
 
-    await page.locator("#widget_1_topup_receiver").selectOption(topUpPhoneNumber);
+    await page
+      .locator("#widget_1_topup_receiver")
+      .selectOption(topUpPhoneNumber);
     await page.locator("#widget_1_topup_amount").fill(topUpAmount);
     await page.locator("#widget_1_topup_agreement").check();
     await page.locator("#execute_phone_btn").click();
@@ -55,6 +56,8 @@ test.describe("Desktop tests", async () => {
     //Assert
     await expect(
       page.getByRole("link", { name: "Doładowanie wykonane! 20," }),
-    ).toHaveText(` Doładowanie wykonane! ${topUpAmount},00PLN na numer ${topUpPhoneNumber}`);
+    ).toHaveText(
+      ` Doładowanie wykonane! ${topUpAmount},00PLN na numer ${topUpPhoneNumber}`,
+    );
   });
 });
