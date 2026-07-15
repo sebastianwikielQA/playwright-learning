@@ -96,6 +96,7 @@ _PS. Po więcej zasobów i aktualizacji, śledź nas na naszej [stronie internet
 
 ## Testowanie selektora w konsoli\
 
- $$('selector')
+$$ ('selector')
 
 ---
+$$

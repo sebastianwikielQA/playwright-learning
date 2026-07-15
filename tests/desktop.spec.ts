@@ -24,8 +24,8 @@ test.describe("Desktop tests", async () => {
     await page.locator("#widget_1_transfer_title").fill(tranferTitle);
     await page.getByRole("button", { name: "wykonaj" }).click();
     await page.getByTestId("close-button").click();
-    //Assert
 
+    //Assert
     await expect(page.getByTestId("message-text")).toHaveText(
       successfulTransferMessage,
     );
