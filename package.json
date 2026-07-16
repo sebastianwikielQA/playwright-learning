@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test:desktop": "npx playwright test tests/desktop.spec.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

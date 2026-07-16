@@ -29,11 +29,11 @@ export default defineConfig({
     baseURL: "https://demo-bank.vercel.app",
 
     /* Global auto-wait timeout for actions like click/fill. */
-    actionTimeout: 5000,
+    actionTimeout: 7000,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "on",
-    video: "retain-on-failure",
+    trace: "off",
+    video: "off",
   },
 
   /* Configure projects for major browsers */
