@@ -6,7 +6,10 @@
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test:desktop": "npx playwright test tests/desktop.spec.ts"
+    "test:desktop": "npx playwright test tests/desktop.spec.ts",
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:desktop:headed": "npm run test:desktop -- --headed"
   },
   "keywords": [],
   "author": "",
