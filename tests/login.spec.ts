@@ -1,11 +1,12 @@
 import { test, expect } from "@playwright/test";
+import { loginData } from "../test-data/login.data";
 
 test.describe("Login test to demobank", () => {
   test("sucessful login with correct credentials", async ({ page }) => {
     //Arrange
     const userNameLocator = await page.getByTestId("user-name");
-    const userLogin = "tester12";
-    const userPassword = "haslo333";
+    const userLogin = loginData.userLogin;
+    const userPassword = loginData.userPassword;
     const expectedUserName = "Jan Demobankowy";
     const loginInputLocator = page.getByTestId("login-input");
     const passwordInputLocator = page.getByTestId("password-input");
@@ -25,17 +26,17 @@ test.describe("Login test to demobank", () => {
   test("unsucessful login with incorrect credentials using too short password and too short login", async ({
     page,
   }) => {
-    const userLogin = "test";
-    const userPassword = "haslo";
+    const incorrectUserLogin = "test";
+    const incorrectUserPassword = "haslo";
     const errorMessageForLoginId = "identyfikator ma min. 8 znaków";
     const errorMessageForPassword = "hasło ma min. 8 znaków";
     const loginInputLocator = page.getByTestId("login-input");
     const passwordInputLocator = page.getByTestId("password-input");
 
     await page.goto("/");
-    await loginInputLocator.fill(userLogin);
+    await loginInputLocator.fill(incorrectUserLogin);
     await loginInputLocator.blur();
-    await passwordInputLocator.fill(userPassword);
+    await passwordInputLocator.fill(incorrectUserPassword);
     await passwordInputLocator.blur();
 
     await expect(page.getByTestId("error-login-id")).toHaveText(

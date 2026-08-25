@@ -1,9 +1,10 @@
 import { test, expect } from "@playwright/test";
+import { loginData } from "../test-data/login.data";
 
 test.describe("Desktop tests", async () => {
   test.beforeEach(async ({ page }) => {
-    const userLogin = "tester12";
-    const userPassword = "haslo333";
+    const userLogin = loginData.userLogin
+    const userPassword = loginData.userPassword
 
     await page.goto("/");
     await page.getByTestId("login-input").fill(userLogin);
@@ -55,7 +56,7 @@ test.describe("Desktop tests", async () => {
       page.getByRole("link", { name: "Doładowanie wykonane! 20," }),
     ).toHaveText(expectedMessage);
   });
-  test("Zmiawna całkowitej kwoty na rachunku bankowym", async ({ page }) => {
+  test("Success change ballance after topUp", async ({ page }) => {
     //Arange
     const topUpAmount = "20";
     const topUpPhoneNumber = "502 xxx xxx";
