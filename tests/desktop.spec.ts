@@ -12,9 +12,7 @@ test.describe("Desktop tests", async () => {
     desktopPage = new DesktopPage(page);
 
     await page.goto("/");
-    await loginPage.loginInputLocator.fill(userLogin);
-    await loginPage.passwordInputLocator.fill(userPassword);
-    await loginPage.loginButtonLocator.click();
+    loginPage.logIn(userLogin, userPassword);
   });
 
   test("Success transaction", async ({ page }) => {

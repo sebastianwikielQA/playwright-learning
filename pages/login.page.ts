@@ -24,4 +24,10 @@ export class LoginPage {
     await page.getByTestId("password-input").click();
     await page.getByTestId("password-input").press("Tab");
   }
+
+  async logIn(userLogin: string, userPassword: string): Promise<void> {
+    await this.loginInputLocator.fill(userLogin);
+    await this.passwordInputLocator.fill(userPassword);
+    await this.loginButtonLocator.click();
+  }
 }

@@ -32,6 +32,5 @@ export class DesktopPage {
     });
     this.totalMoneyValue = this.page.locator("#money_value");
     this.userNameLocator = this.page.getByTestId("user-name");
-
   }
 }

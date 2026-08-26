@@ -2,20 +2,21 @@ import { test, expect } from "@playwright/test";
 import { loginData } from "../test-data/login.data";
 import { LoginPage } from "../pages/login.page";
 import { PaymentPage } from "../pages/payment.page";
+import { SideMenuComponent } from "../components/side-menu.components";
 
 test.describe("Payment tests", async () => {
   let paymentPage: PaymentPage;
+  let sideMenuComponent: SideMenuComponent;
   test.beforeEach(async ({ page }) => {
     const userPassword = loginData.userPassword;
     const userLogin = loginData.userLogin;
     const loginPage = new LoginPage(page);
-    paymentPage = new PaymentPage (page)
+    paymentPage = new PaymentPage(page);
+    sideMenuComponent = new SideMenuComponent(page);
 
     await page.goto("/");
-    await loginPage.loginInputLocator.fill(userLogin);
-    await loginPage.passwordInputLocator.fill(userPassword);
-    await loginPage.loginButtonLocator.click();
-    await page.getByRole("link", { name: "płatności" }).click();
+    loginPage.logIn(userLogin, userPassword);
+    await sideMenuComponent.paymentButton.click();
   });
 
   test("Successful simple payment", async ({ page }) => {
@@ -25,11 +26,12 @@ test.describe("Payment tests", async () => {
     const transferReceiver = "Roman Demobank";
     const successfulTransferMessage = `Przelew wykonany! ${transferAmount},00PLN dla ${transferReceiver}`;
 
-    await paymentPage.transferReceiverField.fill(transferReceiver);
-    await paymentPage.bankAccountField.fill(bankAccount);
-    await paymentPage.transferAmountField.fill(transferAmount);
-    await paymentPage.transferTitleField.fill(transferTitle);
-    await paymentPage.proceedTransferButton.click();
+    paymentPage.makeTransfer(
+      transferReceiver,
+      bankAccount,
+      transferAmount,
+      transferTitle,
+    );
 
     await expect(paymentPage.transferMessage).toHaveText(
       successfulTransferMessage,

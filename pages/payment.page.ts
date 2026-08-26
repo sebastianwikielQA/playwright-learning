@@ -18,4 +18,17 @@ export class PaymentPage {
     });
     this.transferMessage = this.page.getByTestId("message-text");
   }
+
+  async makeTransfer(
+    transferReceiver: string,
+    bankAccount: string,
+    transferAmount: string,
+    transferTitle: string,
+  ) {
+    await this.transferReceiverField.fill(transferReceiver);
+    await this.bankAccountField.fill(bankAccount);
+    await this.transferAmountField.fill(transferAmount);
+    await this.transferTitleField.fill(transferTitle);
+    await this.proceedTransferButton.click();
+  }
 }

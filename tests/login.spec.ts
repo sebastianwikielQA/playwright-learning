@@ -14,12 +14,10 @@ test.describe("Login test to demobank", () => {
     const userLogin = loginData.userLogin;
     const userPassword = loginData.userPassword;
     const expectedUserName = "Jan Demobankowy";
-    const desktopPage = new DesktopPage (page)
+    const desktopPage = new DesktopPage(page);
 
     //Act
-    await loginPage.loginInputLocator.fill(userLogin);
-    await loginPage.passwordInputLocator.fill(userPassword);
-    await loginPage.loginButtonLocator.click();
+    loginPage.logIn(userLogin, userPassword);
 
     //Assert
     await expect(desktopPage.userNameLocator).toHaveText(expectedUserName);
@@ -38,12 +36,8 @@ test.describe("Login test to demobank", () => {
     await loginPage.passwordInputLocator.fill(incorrectUserPassword);
     await loginPage.passwordInputLocator.blur();
 
-    await expect(loginPage.loginError).toHaveText(
-      errorMessageForLoginId,
-    );
-    await expect(loginPage.passwordError).toHaveText(
-      errorMessageForPassword,
-    );
+    await expect(loginPage.loginError).toHaveText(errorMessageForLoginId);
+    await expect(loginPage.passwordError).toHaveText(errorMessageForPassword);
   });
 
   test("login test incorrect credentials with empty login", async ({
@@ -54,11 +48,7 @@ test.describe("Login test to demobank", () => {
     loginPage.skipLoginField(page);
     loginPage.skipPasswordField(page);
 
-    await expect(loginPage.loginError).toHaveText(
-      errorMessageRequiredInput,
-    );
-    await expect(loginPage.passwordError).toHaveText(
-      errorMessageRequiredInput,
-    );
+    await expect(loginPage.loginError).toHaveText(errorMessageRequiredInput);
+    await expect(loginPage.passwordError).toHaveText(errorMessageRequiredInput);
   });
 });
