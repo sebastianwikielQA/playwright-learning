@@ -1,26 +1,28 @@
 import { test, expect } from "@playwright/test";
 import { loginData } from "../test-data/login.data";
+import { LoginPage } from "../pages/login.page";
+import { DesktopPage } from "../pages/desktop.page";
 
 test.describe("Login test to demobank", () => {
+  let loginPage: LoginPage;
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    await page.goto("/");
+  });
   test("sucessful login with correct credentials", async ({ page }) => {
     //Arrange
-    const userNameLocator = await page.getByTestId("user-name");
     const userLogin = loginData.userLogin;
     const userPassword = loginData.userPassword;
     const expectedUserName = "Jan Demobankowy";
-    const loginInputLocator = page.getByTestId("login-input");
-    const passwordInputLocator = page.getByTestId("password-input");
-    const loginButtonLocator = page.getByTestId("login-button");
+    const desktopPage = new DesktopPage (page)
 
     //Act
-    await page.goto("/");
-    await loginInputLocator.fill(userLogin);
-    await passwordInputLocator.fill(userPassword);
-    await loginButtonLocator.click();
+    await loginPage.loginInputLocator.fill(userLogin);
+    await loginPage.passwordInputLocator.fill(userPassword);
+    await loginPage.loginButtonLocator.click();
 
     //Assert
-    await expect(userNameLocator).toBeVisible();
-    await expect(userNameLocator).toHaveText(expectedUserName);
+    await expect(desktopPage.userNameLocator).toHaveText(expectedUserName);
   });
 
   test("unsucessful login with incorrect credentials using too short password and too short login", async ({
@@ -30,19 +32,16 @@ test.describe("Login test to demobank", () => {
     const incorrectUserPassword = "haslo";
     const errorMessageForLoginId = "identyfikator ma min. 8 znaków";
     const errorMessageForPassword = "hasło ma min. 8 znaków";
-    const loginInputLocator = page.getByTestId("login-input");
-    const passwordInputLocator = page.getByTestId("password-input");
 
-    await page.goto("/");
-    await loginInputLocator.fill(incorrectUserLogin);
-    await loginInputLocator.blur();
-    await passwordInputLocator.fill(incorrectUserPassword);
-    await passwordInputLocator.blur();
+    await loginPage.loginInputLocator.fill(incorrectUserLogin);
+    await loginPage.loginInputLocator.blur();
+    await loginPage.passwordInputLocator.fill(incorrectUserPassword);
+    await loginPage.passwordInputLocator.blur();
 
-    await expect(page.getByTestId("error-login-id")).toHaveText(
+    await expect(loginPage.loginError).toHaveText(
       errorMessageForLoginId,
     );
-    await expect(page.getByTestId("error-login-password")).toHaveText(
+    await expect(loginPage.passwordError).toHaveText(
       errorMessageForPassword,
     );
   });
@@ -52,16 +51,13 @@ test.describe("Login test to demobank", () => {
   }) => {
     const errorMessageRequiredInput = "pole wymagane";
 
-    await page.goto("/");
-    await page.locator("#login_id").click();
-    await page.locator("#login_id").press("Tab");
-    await page.getByTestId("password-input").click();
-    await page.getByTestId("password-input").press("Tab");
+    loginPage.skipLoginField(page);
+    loginPage.skipPasswordField(page);
 
-    await expect(page.getByTestId("error-login-id")).toHaveText(
+    await expect(loginPage.loginError).toHaveText(
       errorMessageRequiredInput,
     );
-    await expect(page.getByTestId("error-login-password")).toHaveText(
+    await expect(loginPage.passwordError).toHaveText(
       errorMessageRequiredInput,
     );
   });

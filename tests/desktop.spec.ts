@@ -1,15 +1,20 @@
 import { test, expect } from "@playwright/test";
 import { loginData } from "../test-data/login.data";
+import { LoginPage } from "../pages/login.page";
+import { DesktopPage } from "../pages/desktop.page";
 
 test.describe("Desktop tests", async () => {
+  let desktopPage: DesktopPage;
   test.beforeEach(async ({ page }) => {
-    const userLogin = loginData.userLogin
-    const userPassword = loginData.userPassword
+    const userLogin = loginData.userLogin;
+    const userPassword = loginData.userPassword;
+    const loginPage = new LoginPage(page);
+    desktopPage = new DesktopPage(page);
 
     await page.goto("/");
-    await page.getByTestId("login-input").fill(userLogin);
-    await page.getByTestId("password-input").fill(userPassword);
-    await page.getByTestId("login-button").click();
+    await loginPage.loginInputLocator.fill(userLogin);
+    await loginPage.passwordInputLocator.fill(userPassword);
+    await loginPage.loginButtonLocator.click();
   });
 
   test("Success transaction", async ({ page }) => {
@@ -22,14 +27,14 @@ test.describe("Desktop tests", async () => {
     //Act
     await page.waitForLoadState("domcontentloaded");
 
-    await page.locator("#widget_1_transfer_receiver").selectOption(receiverID);
-    await page.locator("#widget_1_transfer_amount").fill(transferAmount);
-    await page.locator("#widget_1_transfer_title").fill(tranferTitle);
-    await page.getByRole("button", { name: "wykonaj" }).click();
-    await page.getByTestId("close-button").click();
+    await desktopPage.receiverField.selectOption(receiverID);
+    await desktopPage.transferField.fill(transferAmount);
+    await desktopPage.transferTitleField.fill(tranferTitle);
+    await desktopPage.buttonProceed.click();
+    await desktopPage.closeButton.click();
 
     //Assert
-    await expect(page.getByTestId("message-text")).toHaveText(
+    await expect(desktopPage.messageField).toHaveText(
       successfulTransferMessage,
     );
   });
@@ -43,18 +48,16 @@ test.describe("Desktop tests", async () => {
     //Act
     await page.waitForLoadState("domcontentloaded");
 
-    await page
-      .locator("#widget_1_topup_receiver")
-      .selectOption(topUpPhoneNumber);
-    await page.locator("#widget_1_topup_amount").fill(topUpAmount);
-    await page.locator("#widget_1_topup_agreement").check();
-    await page.locator("#execute_phone_btn").click();
-    await page.getByTestId("close-button").click();
+    await desktopPage.phoneNumberField.selectOption(topUpPhoneNumber);
+    await desktopPage.topUpAmountField.fill(topUpAmount);
+    await desktopPage.agreementCheck.check();
+    await desktopPage.buttonProceed.click();
+    await desktopPage.executeButton.click();
 
     //Assert
-    await expect(
-      page.getByRole("link", { name: "Doładowanie wykonane! 20," }),
-    ).toHaveText(expectedMessage);
+    await expect(desktopPage.confirmationMessageField).toHaveText(
+      expectedMessage,
+    );
   });
   test("Success change ballance after topUp", async ({ page }) => {
     //Arange
@@ -66,15 +69,13 @@ test.describe("Desktop tests", async () => {
     //Act
     await page.waitForLoadState("domcontentloaded");
 
-    await page
-      .locator("#widget_1_topup_receiver")
-      .selectOption(topUpPhoneNumber);
-    await page.locator("#widget_1_topup_amount").fill(topUpAmount);
-    await page.locator("#widget_1_topup_agreement").check();
-    await page.locator("#execute_phone_btn").click();
-    await page.getByTestId("close-button").click();
+    await desktopPage.phoneNumberField.selectOption(topUpPhoneNumber);
+    await desktopPage.topUpAmountField.fill(topUpAmount);
+    await desktopPage.agreementCheck.check();
+    await desktopPage.buttonProceed.click();
+    await desktopPage.executeButton.click();
 
     //Assert
-    await expect(page.locator("#money_value")).toHaveText(`${expectedBalance}`);
+    await expect(desktopPage.totalMoneyValue).toHaveText(`${expectedBalance}`);
   });
 });
