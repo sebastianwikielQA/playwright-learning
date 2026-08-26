@@ -1,6 +1,6 @@
 import { Page, Locator } from "playwright";
 
-export class DesktopPage {
+export class DesktopPage  {
   receiverField: Locator;
   transferField: Locator;
   transferTitleField: Locator;
@@ -32,5 +32,21 @@ export class DesktopPage {
     });
     this.totalMoneyValue = this.page.locator("#money_value");
     this.userNameLocator = this.page.getByTestId("user-name");
+  }
+
+  async successTopUp(topUpPhoneNumber: string, topUpAmount: string): Promise<void>{
+    await this.phoneNumberField.selectOption(topUpPhoneNumber);
+    await this.topUpAmountField.fill(topUpAmount);
+    await this.agreementCheck.check();
+    await this.buttonProceed.click();
+    await this.executeButton.click();
+  }
+
+  async successTransaction(receiverID: string, transferAmount: string, tranferTitle: string): Promise<void> {
+    await this.receiverField.selectOption(receiverID);
+    await this.transferField.fill(transferAmount);
+    await this.transferTitleField.fill(tranferTitle);
+    await this.buttonProceed.click(); 
+    await this.closeButton.click();
   }
 }

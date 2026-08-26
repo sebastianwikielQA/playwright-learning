@@ -24,12 +24,7 @@ test.describe("Desktop tests", async () => {
 
     //Act
     await page.waitForLoadState("domcontentloaded");
-
-    await desktopPage.receiverField.selectOption(receiverID);
-    await desktopPage.transferField.fill(transferAmount);
-    await desktopPage.transferTitleField.fill(tranferTitle);
-    await desktopPage.buttonProceed.click();
-    await desktopPage.closeButton.click();
+    desktopPage.successTransaction(receiverID, transferAmount, tranferTitle);
 
     //Assert
     await expect(desktopPage.messageField).toHaveText(
@@ -45,12 +40,7 @@ test.describe("Desktop tests", async () => {
 
     //Act
     await page.waitForLoadState("domcontentloaded");
-
-    await desktopPage.phoneNumberField.selectOption(topUpPhoneNumber);
-    await desktopPage.topUpAmountField.fill(topUpAmount);
-    await desktopPage.agreementCheck.check();
-    await desktopPage.buttonProceed.click();
-    await desktopPage.executeButton.click();
+    desktopPage.successTopUp(topUpPhoneNumber, topUpAmount);
 
     //Assert
     await expect(desktopPage.confirmationMessageField).toHaveText(
@@ -67,11 +57,7 @@ test.describe("Desktop tests", async () => {
     //Act
     await page.waitForLoadState("domcontentloaded");
 
-    await desktopPage.phoneNumberField.selectOption(topUpPhoneNumber);
-    await desktopPage.topUpAmountField.fill(topUpAmount);
-    await desktopPage.agreementCheck.check();
-    await desktopPage.buttonProceed.click();
-    await desktopPage.executeButton.click();
+    desktopPage.successTopUp(topUpPhoneNumber, topUpAmount);
 
     //Assert
     await expect(desktopPage.totalMoneyValue).toHaveText(`${expectedBalance}`);
