@@ -12,10 +12,10 @@ test.describe("Desktop tests", async () => {
     desktopPage = new DesktopPage(page);
 
     await page.goto("/");
-    loginPage.logIn(userLogin, userPassword);
+    await loginPage.logIn(userLogin, userPassword);
   });
 
-  test("Success transaction", async ({ page }) => {
+  test("Success transaction @pulpit @smoke", async ({ page }) => {
     //Arrange
     const receiverID = "1";
     const transferAmount = "120";
@@ -24,7 +24,11 @@ test.describe("Desktop tests", async () => {
 
     //Act
     await page.waitForLoadState("domcontentloaded");
-    desktopPage.successTransaction(receiverID, transferAmount, tranferTitle);
+    await desktopPage.successTransaction(
+      receiverID,
+      transferAmount,
+      tranferTitle,
+    );
 
     //Assert
     await expect(desktopPage.messageField).toHaveText(
@@ -32,7 +36,7 @@ test.describe("Desktop tests", async () => {
     );
   });
 
-  test("Success mobile top-up", async ({ page }) => {
+  test("Success mobile top-up @pulpit", async ({ page }) => {
     //Arange
     const topUpAmount = "20";
     const topUpPhoneNumber = "502 xxx xxx";
@@ -40,14 +44,14 @@ test.describe("Desktop tests", async () => {
 
     //Act
     await page.waitForLoadState("domcontentloaded");
-    desktopPage.successTopUp(topUpPhoneNumber, topUpAmount);
+    await desktopPage.successTopUp(topUpPhoneNumber, topUpAmount);
 
     //Assert
     await expect(desktopPage.confirmationMessageField).toHaveText(
       expectedMessage,
     );
   });
-  test("Success change ballance after topUp", async ({ page }) => {
+  test("Success change ballance after topUp @pulpit", async ({ page }) => {
     //Arange
     const topUpAmount = "20";
     const topUpPhoneNumber = "502 xxx xxx";
@@ -57,7 +61,7 @@ test.describe("Desktop tests", async () => {
     //Act
     await page.waitForLoadState("domcontentloaded");
 
-    desktopPage.successTopUp(topUpPhoneNumber, topUpAmount);
+    await desktopPage.successTopUp(topUpPhoneNumber, topUpAmount);
 
     //Assert
     await expect(desktopPage.totalMoneyValue).toHaveText(`${expectedBalance}`);

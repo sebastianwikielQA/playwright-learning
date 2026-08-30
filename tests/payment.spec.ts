@@ -15,18 +15,18 @@ test.describe("Payment tests", async () => {
     sideMenuComponent = new SideMenuComponent(page);
 
     await page.goto("/");
-    loginPage.logIn(userLogin, userPassword);
+    await loginPage.logIn(userLogin, userPassword);
     await sideMenuComponent.paymentButton.click();
   });
 
-  test("Successful simple payment", async ({ page }) => {
+  test("Successful simple payment", { tag: "@payment" }, async ({}) => {
     const bankAccount = "12 3456 7890 1234 4567 8901";
     const transferAmount = "100";
     const transferTitle = "przelew";
     const transferReceiver = "Roman Demobank";
     const successfulTransferMessage = `Przelew wykonany! ${transferAmount},00PLN dla ${transferReceiver}`;
 
-    paymentPage.makeTransfer(
+    await paymentPage.makeTransfer(
       transferReceiver,
       bankAccount,
       transferAmount,

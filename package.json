@@ -9,14 +9,19 @@
     "test:desktop": "npx playwright test tests/desktop.spec.ts",
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
-    "test:desktop:headed": "npm run test:desktop -- --headed"
+    "test:desktop:headed": "npm run test:desktop -- --headed",
+    "test:smoke": "npx playwright test --grep '@smoke'",
+    "test:login": "npx playwright test --grep \"login\"",
+    "playwright:actual": "npx @playwright/test --version",
+    "playwright:new": "npm outdated @playwright/test",
+    "playwright:update": "npm i @playwright/test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@playwright/test": "^1.60.0",
+    "@playwright/test": "^1.62.1",
     "@types/node": "^25.9.3",
     "prettier": "3.9.1"
   }
